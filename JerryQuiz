@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Culture Générale</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#001e4d;
+}
+
+.app{
+    background:#fff;
+    width:90%;
+    max-width:600px;
+    margin:100px auto;
+    padding:30px;
+    border-radius:10px;
+}
+
+.app h1{
+    font-size:25px;
+    color:#001e4d;
+    font-weight:600;
+    border-bottom:1px solid #333;
+    padding-bottom:20px;
+}
+
+.quiz{
+    padding:20px 0;
+}
+
+.quiz h2{
+    font-size:18px;
+    color:#001e4d;
+    font-weight:600;
+}
+
+.btn{
+    background:#fff;
+    color:#222;
+    font-weight:500;
+    width:100%;
+    border:1px solid #222;
+    padding:10px;
+    margin:10px 0;
+    text-align:left;
+    border-radius:4px;
+    cursor:pointer;
+    transition:all 0.3s;
+}
+
+.btn:hover:not([disabled]){
+    background:#222;
+    color:#fff;
+}
+
+.btn:disabled{
+    cursor:no-drop;
+}
+
+.correct{
+    background:#9aeabc;
+}
+
+.incorrect{
+    background:#ff9393;
+}
+
+#next-btn{
+    background:#001e4d;
+    color:#fff;
+    font-weight:500;
+    width:150px;
+    border:0;
+    padding:10px;
+    margin:20px auto 0;
+    border-radius:4px;
+    cursor:pointer;
+    display:none;
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+    <h1>Quiz Culture Générale</h1>
+
+    <div class="quiz">
+        <h2 id="question">Question</h2>
+        <div id="rep-bouton"></div>
+        <button id="next-btn">Suivant</button>
+    </div>
+</div>
+
+<script>
+
+const questions = [
+{
+    question:"Quelle est la capitale de France ?",
+    rep:[
+        {Text:"Rome",correct:false},
+        {Text:"Paris",correct:true},
+        {Text:"Versailles",correct:false},
+        {Text:"Bordeaux",correct:false}
+    ]
+},
+{
+    question:"Quel est le plus grand pays du monde en superficie ?",
+    rep:[
+        {Text:"Russie",correct:true},
+        {Text:"États-Unis",correct:false},
+        {Text:"Canada",correct:false},
+        {Text:"Chine",correct:false}
+    ]
+},
+{
+    question:"En quelle année a eu lieu la chute du mur de Berlin ?",
+    rep:[
+        {Text:"1989",correct:true},
+        {Text:"1998",correct:false},
+        {Text:"1987",correct:false},
+        {Text:"1970",correct:false}
+    ]
+},
+{
+    question:"Quel fleuve traverse la ville de Londres ?",
+    rep:[
+        {Text:"La Tamise",correct:true},
+        {Text:"Le Nil",correct:false},
+        {Text:"Fleuve de Londres",correct:false},
+        {Text:"Amazone",correct:false}
+    ]
+},
+{
+    question:"Quelle est la capitale du Canada ?",
+    rep:[
+        {Text:"Londres",correct:false},
+        {Text:"Québec",correct:false},
+        {Text:"Lima",correct:false},
+        {Text:"Ottawa",correct:true}
+    ]
+},
+{
+    question: "Qui a découvert l'Amérique en 1492 ?",
+    rep: [
+        { Text: "Christophe Colomb", correct: true },
+        { Text: "Marco Polo", correct: false },
+        { Text: "Vasco de Gama", correct: false },
+        { Text: "Magellan", correct: false },
+    ]
+},
+{
+    question: "Quelle planète est surnommée la planète rouge ?",
+    rep: [
+        { Text: "Vénus", correct: false },
+        { Text: "Mars", correct: true },
+        { Text: "Jupiter", correct: false },
+        { Text: "Saturne", correct: false },
+    ]
+},
+{
+    question: "Quel est le plus long fleuve du monde ?",
+    rep: [
+        { Text: "Nil", correct: true },
+        { Text: "Amazone", correct: false },
+        { Text: "Mississippi", correct: false },
+        { Text: "Yangtsé", correct: false },
+    ]
+},
+{
+    question: "Combien de continents existe-t-il sur Terre ?",
+    rep: [
+        { Text: "5", correct: false },
+        { Text: "6", correct: false },
+        { Text: "7", correct: true },
+        { Text: "8", correct: false },
+    ]
+},
+{
+    question: "Quel est l'organe principal de la circulation sanguine ?",
+    rep: [
+        { Text: "Le foie", correct: false },
+        { Text: "Le cœur", correct: true },
+        { Text: "Le cerveau", correct: false },
+        { Text: "Les poumons", correct: false },
+    ]
+},
+{
+    question: "Quelle langue est la plus parlée dans le monde ?",
+    rep: [
+        { Text: "Français", correct: false },
+        { Text: "Espagnol", correct: false },
+        { Text: "Mandarin", correct: true },
+        { Text: "Anglais", correct: false },
+    ]
+},
+{
+    question: "Quel est le symbole chimique de l'eau ?",
+    rep: [
+        { Text: "O2", correct: false },
+        { Text: "CO2", correct: false },
+        { Text: "H2O", correct: true },
+        { Text: "NaCl", correct: false },
+    ]
+},
+{
+    question: "Quel animal est le plus grand mammifère du monde ?",
+    rep: [
+        { Text: "Éléphant", correct: false },
+        { Text: "Baleine bleue", correct: true },
+        { Text: "Girafe", correct: false },
+        { Text: "Requin blanc", correct: false },
+    ]
+},
+{
+    question: "Quel est le plus grand océan du monde ?",
+    rep: [
+        { Text: "Océan Atlantique", correct: false },
+        { Text: "Océan Indien", correct: false },
+        { Text: "Océan Pacifique", correct: true },
+        { Text: "Océan Arctique", correct: false },
+    ]
+},
+{
+    question: "Quelle est la devise officielle d'Haïti ?",
+    rep: [
+        { Text: "Liberté, Égalité, Fraternité", correct: false },
+        { Text: "L'Union fait la force", correct: true },
+        { Text: "Dieu et mon droit", correct: false },
+        { Text: "Travail et Progrès", correct: false },
+    ]
+},
+];
+
+const questionElement = document.getElementById("question");
+const repButton = document.getElementById("rep-bouton");
+const nextButton = document.getElementById("next-btn");
+
+let currentQuestionIndex = 0;
+let score = 0;
+
+function startQuiz(){
+    currentQuestionIndex = 0;
+    score = 0;
+    nextButton.innerHTML = "Suivant";
+    showQuestion();
+}
+
+function showQuestion(){
+    resetState();
+
+    let currentQuestion = questions[currentQuestionIndex];
+    let questionNo = currentQuestionIndex + 1;
+
+    questionElement.innerHTML =
+        questionNo + ". " + currentQuestion.question;
+
+    currentQuestion.rep.forEach(rep => {
+
+        const button = document.createElement("button");
+
+        button.innerHTML = rep.Text;
+        button.classList.add("btn");
+
+        repButton.appendChild(button);
+
+        if(rep.correct){
+            button.dataset.correct = rep.correct;
+        }
+
+        button.addEventListener("click", selectRep);
+    });
+}
+
+function resetState(){
+
+    nextButton.style.display = "none";
+
+    while(repButton.firstChild){
+        repButton.removeChild(repButton.firstChild);
+    }
+}
+
+function selectRep(e){
+
+    const selectedBtn = e.target;
+    const isCorrect =
+        selectedBtn.dataset.correct === "true";
+
+    if(isCorrect){
+        selectedBtn.classList.add("correct");
+        score++;
+    }else{
+        selectedBtn.classList.add("incorrect");
+    }
+
+    Array.from(repButton.children).forEach(button => {
+
+        if(button.dataset.correct === "true"){
+            button.classList.add("correct");
+        }
+
+        button.disabled = true;
+    });
+
+    nextButton.style.display = "block";
+}
+
+function showScore(){
+
+    resetState();
+
+    let satisfaction = "";
+    let pourcentage = (score / questions.length) * 100;
+
+    if(pourcentage >= 80){
+        satisfaction = "Excellent ! 🌟";
+    }else if(pourcentage >= 60){
+        satisfaction = "Très bien 👍";
+    }else if(pourcentage >= 40){
+        satisfaction = "Passable 🙂";
+    }else{
+        satisfaction = "Besoin d'amélioration 📚";
+    }
+
+    questionElement.innerHTML =
+    `Vous avez obtenu ${score} sur ${questions.length} !<br><br>${satisfaction}`;
+
+    nextButton.innerHTML = "Recommencer";
+    nextButton.style.display = "block";
+}
+
+function handleNextButton(){
+
+    currentQuestionIndex++;
+
+    if(currentQuestionIndex < questions.length){
+        showQuestion();
+    }else{
+        showScore();
+    }
+}
+
+nextButton.addEventListener("click", () => {
+
+    if(currentQuestionIndex < questions.length){
+        handleNextButton();
+    }else{
+        startQuiz();
+    }
+});
+
+startQuiz();
+
+</script>
+
+</body>
+</html>
